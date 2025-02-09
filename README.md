@@ -4,6 +4,8 @@ Cyber Security Course
 
 ---
 
+### Time Table
+
 | Date       | Used hours |         Subject(s)         |                            output                            |
 | :--------- | :--------: | :------------------------: | :----------------------------------------------------------: |
 | 25.01.2024 |     1      |     First Assingnmnet      |         Create a git repo with logbook hour tracking         |
@@ -12,7 +14,8 @@ Cyber Security Course
 
 ---
 
-Lab Completed -
+### Labs Completed -
+
 ![alt text](image.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
