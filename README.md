@@ -12,6 +12,7 @@ Cyber Security Course
 | 11.18.2025 |     1      | Second Assingnmnet |             SQL Injection             |
 | 11.18.2025 |     1      | Second Assingnmnet |            Authentication             |
 | 11.18.2025 |     1      | Second Assingnmnet |             Access Token              |
+| 11.28.2025 |     5      | Booking Phase Part 1 |             Penatration Testing Reports             |
 
 ---
 
