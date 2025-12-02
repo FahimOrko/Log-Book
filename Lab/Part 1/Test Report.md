@@ -37,7 +37,7 @@ Identify vulnerabilities and weaknesses in the registration system, focusing on:
 
 ### **Test Environment & Dates**
 
-- **Start:** 28.11.2025
+- **Start:** 29.11.2025
 - **End:** 29.11.2025
 
 ### **Environment Details**
