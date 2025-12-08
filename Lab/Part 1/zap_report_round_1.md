@@ -8,17 +8,19 @@ ZAP by [Checkmarx](https://checkmarx.com/).
 | ------------- | ---------------- |
 | High          | 0                |
 | Medium        | 3                |
-| Low           | 1                |
-| Informational | 0                |
+| Low           | 2                |
+| Informational | 1                |
 
 ## Alerts
 
-| Name                                         | Risk Level | Number of Instances |
-| -------------------------------------------- | ---------- | ------------------- |
-| Absence of Anti-CSRF Tokens                  | Medium     | 1                   |
-| Content Security Policy (CSP) Header Not Set | Medium     | 2                   |
-| Missing Anti-clickjacking Header             | Medium     | 2                   |
-| X-Content-Type-Options Header Missing        | Low        | 5                   |
+| Name                                         | Risk Level    | Number of Instances |
+| -------------------------------------------- | ------------- | ------------------- |
+| Absence of Anti-CSRF Tokens                  | Medium        | 2                   |
+| Content Security Policy (CSP) Header Not Set | Medium        | 2                   |
+| Missing Anti-clickjacking Header             | Medium        | 2                   |
+| Application Error Disclosure                 | Low           | 1                   |
+| X-Content-Type-Options Header Missing        | Low           | 5                   |
+| Authentication Request Identified            | Informational | 1                   |
 
 ## Alert Detail
 
@@ -45,7 +47,15 @@ CSRF has primarily been used to perform an action against a target site using th
   - Evidence: `<form action="/register" method="POST">`
   - Other Info: `No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: "birthdate" "password" "username" ].`
 
-Instances: 1
+- URL: http://localhost:8002/register
+
+  - Method: `GET`
+  - Parameter: ``
+  - Attack: ``
+  - Evidence: `<form action="/register" method="POST">`
+  - Other Info: `No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: "birthdate" "password" "username" ].`
+
+Instances: 2
 
 ### Solution
 
@@ -169,6 +179,36 @@ If you expect the page to be framed only by pages on your server (e.g. it's part
 
 #### Source ID: 3
 
+### [ Application Error Disclosure ](https://www.zaproxy.org/docs/alerts/90022/)
+
+##### Low (Medium)
+
+### Description
+
+This page contains an error/warning message that may disclose sensitive information like the location of the file that produced the unhandled exception. This information can be used to launch further attacks against the web application. The alert could be a false positive if the error message is found inside a documentation page.
+
+- URL: http://localhost:8000/register
+
+  - Method: `POST`
+  - Parameter: ``
+  - Attack: ``
+  - Evidence: `HTTP/1.1 500 Internal Server Error`
+  - Other Info: ``
+
+Instances: 1
+
+### Solution
+
+Review the source code of this page. Implement custom error pages. Consider implementing a mechanism to provide a unique error reference/identifier to the client (browser) while logging the details on the server side and not exposing them to the user.
+
+### Reference
+
+#### CWE Id: [ 550 ](https://cwe.mitre.org/data/definitions/550.html)
+
+#### WASC Id: 13
+
+#### Source ID: 3
+
 ### [ X-Content-Type-Options Header Missing ](https://www.zaproxy.org/docs/alerts/10021/)
 
 ##### Low (Medium)
@@ -237,5 +277,37 @@ If possible, ensure that the end user uses a standards-compliant and modern web 
 #### CWE Id: [ 693 ](https://cwe.mitre.org/data/definitions/693.html)
 
 #### WASC Id: 15
+
+#### Source ID: 3
+
+### [ Authentication Request Identified ](https://www.zaproxy.org/docs/alerts/10111/)
+
+##### Informational (High)
+
+### Description
+
+The given request has been identified as an authentication request. The 'Other Info' field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to "Auto-Detect" then this rule will change the authentication to match the request identified.
+
+- URL: http://localhost:8002/login
+
+  - Method: `POST`
+  - Parameter: `username`
+  - Attack: ``
+  - Evidence: `password`
+  - Other Info: `userParam=username
+userValue=foo-bar@example.com
+passwordParam=password
+referer=http://localhost:8002/login
+csrfToken=csrf_token`
+
+Instances: 1
+
+### Solution
+
+This is an informational alert rather than a vulnerability and so there is nothing to fix.
+
+### Reference
+
+- [ https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/ ](https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/)
 
 #### Source ID: 3
