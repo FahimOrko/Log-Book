@@ -1,148 +1,246 @@
-## Authorization Testing Report
+# Authorization Testing Report
 
-### Application Information
+## Application Information
 
-- Target: Resource Reservation System
-- URL: http://localhost:8003
-- Testing type: Role-based authorization verification
-- Roles tested: Guest, Reserver, Administrator
+- **Target Application:** Resource Reservation System
+- **Base URL:** http://localhost:8003
+- **Testing Type:** Role-based authorization verification
+- **Roles Tested:** Guest, Reserver, Administrator
 
-- Tools used:
-  - Browser (manual testing)
-  - OWASP ZAP
-  - Endpoint guessing (manual URL manipulation)
+### Tools Used
+
+- Web browser (manual testing)
+- OWASP ZAP
+- Gobuster (endpoint discovery)
+- Manual URL and API endpoint testing
 
 ---
 
 ## 🧑‍🦲 Guest (Not Logged In)
 
-#### ✅ Can Do
+### ✅ Can Do
 
-- View public resource list — /
+- **View public resource list**
 
-  - Observation: Resources and bookings are visible without login
-  - Spec match: ✅ Yes (spec 8)
+  - Endpoint: `/`
+  - Observation: Resources and booking time slots are visible without authentication.
+  - Spec match: ✅ Yes (Specification 8)
 
-- View booked time slots without identity disclosure — /
+- **View booked time slots without identity disclosure**
 
-  - Observation: Booked resources are shown without logging in
-  - Spec match: ✅ yes (spec 8, GDPR)
+  - Endpoint: `/`
+  - Observation: Booked resources are displayed without showing reserver identity.
+  - Spec match: ✅ Yes (Specification 8, GDPR compliant)
 
-- Access login page — /login
+- **Access login page**
 
-  - Observation: Login form accessible
+  - Endpoint: `/login`
+  - Observation: Login form is accessible.
   - Spec match: ✅ Yes
 
-- Access registration page — /register
+- **Access registration page**
 
-  - Observation: Registration form accessible
+  - Endpoint: `/register`
+  - Observation: Registration form is accessible.
   - Spec match: ✅ Yes
 
-#### Extra
+- **Access resources page**
+  - Endpoint: `/resources`
+  - Observation: Resources are visible without login.
+  - Spec match: ⚠️ Not explicitly restricted in specs
 
-- View endpoint resource — /resources
+---
 
-  - Observation: Resources page is visible without login but nothing happens when new resorces are added
+### ❌ Cannot Do (Expected but Violated)
 
-#### ❌ Cannot Do
+- **Access reservations API**
 
-- Access reservation page — /reservation
+  - Endpoint: `GET /api/reservations`
+  - Observation: Returns full reservation data including IDs, resource names, and booking times.
+  - Spec match: ❌ No
+  - Impact: Unauthorized disclosure of reservation data.
 
-  - Observation: Redirected to /login
+- **Access users API**
+
+  - Endpoint: `GET /api/users`
+  - Observation: Returns full user list including usernames, roles, and user tokens.
+  - Spec match: ❌ No
+  - Impact: Critical user enumeration and role disclosure.
+
+- **Access resources API**
+
+  - Endpoint: `GET /api/resources`
+  - Observation: Full resource list accessible without authentication.
+  - Spec match: ❌ No
+  - Impact: Backend authorization not enforced.
+
+- **Access reservation creation page**
+
+  - Endpoint: `/reservation`
+  - Observation: Redirected to unauthorized status page.
   - Spec match: ✅ Yes
 
-- Create reservations via API — /api/reservations (POST)
+- **Create reservations**
 
-  - Observation: Request rejected when not authenticated
+  - Endpoint: `POST /api/reservations`
+  - Observation: Request rejected without authentication.
   - Spec match: ✅ Yes
 
-- Access user profile — /profile
+- **Access user profile**
 
-  - Observation: Redirected to login
+  - Endpoint: `/profile`
+  - Observation: Redirected to login.
   - Spec match: ✅ Yes
 
-- Access admin pages — /admin/\*
-
-  - Observation: Access denied / redirect
+- **Access admin pages**
+  - Endpoint: `/admin/*`
+  - Observation: Access denied or redirected.
   - Spec match: ✅ Yes
 
 ---
 
 ## 🧑‍💼 Reserver (Authenticated User)
 
-#### ✅ Can Do
+### ✅ Can Do
 
-- Log in to the system — /login
+- **Log in**
 
-  - Observation: Successful authentication
+  - Endpoint: `/login`
+  - Observation: Authentication successful.
   - Spec match: ✅ Yes
 
-- View resource list — /resources
+- **View resource list**
 
-  - Observation: Resources form visible
+  - Endpoint: `/resources`
+  - Observation: Resources visible.
   - Spec match: ✅ Yes
 
-- Book a resource — /reservation, /api/reservations
-
-  - Observation: Reservation can be created and /api/reservations retureens a json
-  - Spec match: ✅ Yes (spec 6, 7)
-
-- View own profile — /profile
-
-  - Observation: Own user data not visible
-  - Spec match: ❌ No (GDPR compliant)
-
-#### ❌ Cannot Do
-
-- Access admin dashboard — /admin
-
-  - Observation: Access denied / redirect
+- **Create reservations**
+  - Endpoints: `/reservation`, `POST /api/reservations`
+  - Observation: Reservations can be created successfully.
   - Spec match: ✅ Yes
 
-- Manage resources — /admin/resources
+---
 
-  - Observation: Access denied
-  - Spec match: ✅ Yes (spec 4)
+### ❌ Cannot Do / Authorization Issues
 
-- Delete users — /api/admin/users/:id
+- **View own profile**
 
-  - Observation: Returns an error json object
-  - Spec match: ✅ Yes (spec 5)
+  - Endpoint: `/profile`
+  - Observation: Own user data is not displayed.
+  - Spec match: ❌ No (functionality missing)
 
-- View or modify other users’ reservations — /api/reservations/:id
+- **Access admin dashboard**
 
-  - Observation: Cannot edit only sends the resvervation info back
-  - Spec match: ✅ Yes (authorization enforced)
+  - Endpoint: `/admin`
+  - Observation: Access denied.
+  - Spec match: ✅ Yes
+
+- **Manage resources**
+
+  - Endpoint: `/admin/resources`
+  - Observation: Access denied.
+  - Spec match: ✅ Yes (Specification 4)
+
+- **Delete users**
+
+  - Endpoint: `/api/admin/users/:id`
+  - Observation: Returns error response.
+  - Spec match: ✅ Yes (Specification 5)
+
+- **View or modify other users’ reservations**
+  - Endpoint: `/api/reservations/:id`
+  - Observation: Reservation data is returned, but modification is not possible.
+  - Spec match: ⚠️ Partial — ID-based access control is weak due to data disclosure.
 
 ---
 
 ## 🧑‍💼🛡️ Administrator
 
-#### ✅ Can Do
+### ✅ Can Do
 
-- Access admin dashboard — /admin
+- **Manage resources**
 
-  - Observation: Admin cannot access any dashboard while logged in
-  - Spec match: ❌ No
+  - Endpoint: `/resources?id={id}`
+  - Observation: Resources can be created, modified, and deleted.
+  - ![Delete Option](image.png)
+  - Spec match: ✅ Yes (Specification 4)
 
-- Create, modify, delete resources — /admin/resources/new
-
-  - Observation: Actions succeed
-  - Spec match: ✅ Yes (spec 4)
-
-- View and manage all reservations — /admin/reservations
-
-  - Observation: All reservations visible and editable
+- **View all reservations**
+  - Endpoint: `GET /api/reservations`
+  - Observation: All reservations are visible.
   - Spec match: ✅ Yes
 
-- Delete reserver accounts — /admin/users/delete/:id
+---
 
-  - Observation: User deletion successful
-  - Spec match: ✅ Yes (spec 5)
+### ❌ Cannot Do / Missing Functionality
 
-#### ❌ Cannot Do
+- **Access admin dashboard**
 
-- View plaintext passwords or sensitive credentials
+  - Endpoint: `/admin`
+  - Observation: Admin dashboard not accessible even when logged in.
+  - Spec match: ❌ No
 
-  - Observation: No sensitive data exposed
-  - Spec match: ✅ Yes (GDPR, PbD)
+- **Delete reserver accounts**
+
+  - Endpoint: `/admin/users/delete/:id`
+  - Observation: Endpoint not found.
+  - Spec match: ❌ No (Specification 5)
+
+- **View sensitive credentials**
+  - Observation: No plaintext passwords or sensitive credentials exposed.
+  - Spec match: ✅ Yes (GDPR, Privacy by Design)
+
+---
+
+## 🔍 Phase 3 – Endpoint Discovery Results
+
+### Gobuster Directory Enumeration (`/`)
+
+Discovered endpoints:
+
+- `/login`
+- `/register`
+- `/reservation`
+- `/resources`
+- `/status.html`
+
+- ![Root Endpoint](image-1.png)
+
+### Gobuster API Enumeration (`/api`)
+
+Discovered endpoints:
+
+- `/api/reservations`
+- `/api/resources`
+- `/api/users`
+- `/api/session`
+
+- ![Api Endpoint](image-2.png)
+
+---
+
+## 🚨 Critical Authorization Findings
+
+1. **Missing backend authorization**
+
+   - Sensitive API endpoints are accessible without authentication.
+   - Affects `/api/reservations`, `/api/users`, and `/api/resources`.
+
+2. **User enumeration and role disclosure**
+
+   - `/api/users` exposes usernames, roles, and user tokens.
+   - Violates GDPR and Privacy by Design principles.
+
+3. **Reservation data disclosure**
+   - Guests can access full reservation data via API.
+   - Violates principle of least privilege.
+
+---
+
+## 📌 Conclusion
+
+The application does not correctly enforce authorization at the backend.  
+While frontend access controls exist, sensitive API endpoints are exposed to unauthenticated users, leading to critical authorization failures.
+
+The system does **not** fully comply with the provided specifications, GDPR requirements, or Privacy by Design principles.
