@@ -10,26 +10,24 @@
 
 ### **Purpose**
 
-Identify vulnerabilities and weaknesses in the registration system, focusing on:
-
-- Form validation
-- Server-side input handling
-- Security headers
-- CSRF protection
+Evaluate the security of the target web application and identify vulnerabilities in registration, authentication, booking, and general user‑input workflows.
 
 ### **Scope**
 
 #### **Tested Components**
 
-- `/register` page
-- Form fields: `username`, `password`, `birthdate`
-- Server response behavior and headers
+- Registration form
+- Login form
+- User authentication flow
+- Booking system workflow
+- Form input validation
+- Browser-to-server communication
 
 #### **Exclusions**
 
-- Login page
-- Booking functionality
-- Admin endpoints
+- Admin panel
+- Payment processing
+- Third‑party services
 
 ### **Test Approach**
 
