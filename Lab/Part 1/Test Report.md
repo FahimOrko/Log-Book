@@ -1,116 +1,103 @@
-# **Booking System Phase 1 – Penetration Test Report**
+# 1️⃣ Introduction
+
+**Tester(s):**
+
+- Name: Fahim Orko
+
+**Purpose:**
+
+- The purpose of this test is to identify vulnerabilities in the Booking System Phase 1 application, focusing specifically on the **registration page**. The goal is to discover security and functionality issues that could lead to unauthorized access, data exposure, or other system misuse.
+
+**Scope:**
+
+- **Tested components:**
+  - Registration page (`/register`)
+  - Input validation
+  - Server error handling
+  - Session behavior
+  - Security headers
+  - Automated scanning with OWASP ZAP
+  - Manual browser-based testing
+- **Exclusions:**
+  - Login page
+  - Booking features
+  - Admin functionality
+  - DoS testing or destructive testing
+- **Test approach:**
+  - **Black-box testing**
+
+**Test environment & dates:**
+
+- **Start:** _2025-11-28_
+- **End:** _2025-11-28_
+- **Test environment details:**
+  - OS: Windows 11
+  - Application running locally at `http://localhost:8000/`
+  - Browser: Chrome
+  - Tools used:
+    - OWASP ZAP 2.16.1
+    - Manual testing via browser
+
+**Assumptions & constraints:**
+
+- The application is in an early development phase and expected to have weaknesses.
+- Testing time was limited, so focus was on high-impact issues.
+- No user accounts were required to test registration.
+- All testing was conducted locally and safely.
 
 ---
 
-## **1️⃣ Introduction**
+# 2️⃣ Executive Summary
 
-### **Tester(s)**
+**Short summary:**  
+Security testing of the registration page identified several security weaknesses. Automated scanning using OWASP ZAP revealed missing CSRF protection, weak or missing security headers, and application error disclosure. In addition, manual testing performed directly in the browser identified SQL Injection behavior and path traversal input patterns that were not detected by the automated scan. These issues expose the application to serious exploitation risks if left unaddressed.
 
-- **Name:** Fahim Orko
+**Overall risk level:**  
+➡️ **High**
 
-### **Purpose**
+**Top 5 immediate actions:**
 
-Evaluate the security of the target web application and identify vulnerabilities in registration, authentication, booking, and general user‑input workflows.
-
-### **Scope**
-
-#### **Tested Components**
-
-- Registration form
-- Login form
-- User authentication flow
-- Booking system workflow
-- Form input validation
-- Browser-to-server communication
-
-#### **Exclusions**
-
-- Admin panel
-- Payment processing
-- Third‑party services
-
-### **Test Approach**
-
-- **Gray‑box testing**
-
-### **Test Environment & Dates**
-
-- **Start:** 29.11.2025
-- **End:** 29.11.2025
-
-### **Environment Details**
-
-- **OS:** Windows 11
-- **Browser:** Chrome
-- **Database:** PostgreSQL (Docker)
-- **Backend:** Deno runtime (Docker)
-- **Testing Tool:** OWASP ZAP
-
-### **Assumptions & Constraints**
-
-- Testing limited to local environment
-- No privileged credentials used
-- Backend not modified during testing
+1. Implement server-side validation and parameterized database queries.
+2. Add CSRF protection tokens to all forms.
+3. Add missing security headers (CSP, X-Frame-Options, X-Content-Type-Options).
+4. Fix error handling to avoid exposing server messages.
+5. Harden backend logic to prevent path traversal patterns.
 
 ---
 
-## **2️⃣ Executive Summary**
+# 3️⃣ Severity scale & definitions
 
-### **Summary**
-
-Penetration testing exposed **3 medium‑risk** vulnerabilities and **5 low‑risk** issues.  
-The primary issues involve missing security headers, lack of CSRF protection, and susceptibility to clickjacking.
-
-### **Overall Risk Level**
-
-**Medium**
-
-### **Top 5 Immediate Actions**
-
-1. Implement CSRF tokens in registration POST requests.
-2. Add security headers:
-   - `Content-Security-Policy` (CSP)
-   - `X-Frame-Options`
-   - `X-Content-Type-Options`
-3. Prevent exposure of internal server error messages.
-4. Use HTTPS and enforce `Strict-Transport-Security` (HSTS).
-5. Enforce backend-side validation for all input fields.
+| **Severity Level** | **Description**                                                                                                       | **Recommended Action**           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| 🔴 **High**        | A serious vulnerability that can lead to full system compromise or data breach (e.g., SQL Injection, Path Traversal). | _Immediate fix required_         |
+| 🟠 **Medium**      | A significant issue that may require specific conditions or user interaction (e.g., XSS, CSRF).                       | _Fix ASAP_                       |
+| 🟡 **Low**         | A minor issue or configuration weakness (e.g., error disclosure).                                                     | _Fix soon_                       |
+| 🔵 **Info**        | No direct risk, but useful for system hardening (e.g., missing security headers).                                     | _Monitor and fix in maintenance_ |
 
 ---
 
-## **3️⃣ Severity Scale & Definitions**
+# 4️⃣ Findings
 
-| Severity Level | Description                                                                    | Recommended Action     |
-| -------------- | ------------------------------------------------------------------------------ | ---------------------- |
-| 🔴 **High**    | Serious vulnerability with potential for full system compromise or data breach | Immediate fix required |
-| 🟠 **Medium**  | Significant issue such as missing CSRF or XSS risk                             | Fix ASAP               |
-| 🟡 **Low**     | Minor weakness or misconfiguration                                             | Fix soon               |
-| 🔵 **Info**    | Non‑critical, for hardening only                                               | Monitor or patch later |
+> **Note:** OWASP ZAP did not automatically detect SQL Injection or Path Traversal vulnerabilities during scanning. These issues were identified through **manual testing using the browser**, highlighting the importance of combining automated and manual testing techniques.
 
----
-
-## **4️⃣ Findings**
-
-| ID       | Severity  | Finding                           | Description                                                    | Evidence / Proof                                    |
-| -------- | --------- | --------------------------------- | -------------------------------------------------------------- | --------------------------------------------------- |
-| **F‑01** | 🟠 Medium | Absence of CSRF token             | POST request sent without CSRF protection                      | ZAP: `<form action="/register" method="POST">`      |
-| **F‑02** | 🟠 Medium | Missing CSP header                | Increases risk of XSS or content injection                     | ZAP: _Content Security Policy (CSP) Header Not Set_ |
-| **F‑03** | 🟠 Medium | Missing Anti‑clickjacking header  | Page can be iframed → clickjacking risk                        | ZAP: _Missing Anti-clickjacking Header_             |
-| **F‑04** | 🟡 Low    | Missing X‑Content-Type-Options    | Enables MIME‑sniffing                                          | ZAP: _X-Content-Type-Options Header Missing_        |
-| **F‑05** | 🟡 Low    | Multiple missing security headers | Weakens transport security                                     | ZAP: _HTTP header analysis suggestions_             |
-| **F‑06** | 🟡 Low    | Error disclosure risk             | Internal error details revealed when invalid data is submitted | ZAP: Error response evidence                        |
-| **F‑07** | 🟡 Low    | Incomplete HTTP header hardening  | Headers like X‑Frame‑Options or CSP not fully enforced         | ZAP: Header misconfiguration notes                  |
+| ID   | Severity  | Finding                          | Description                                                                                                                                 | Evidence / Proof                                                              |
+| ---- | --------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| F-01 | 🔴 High   | SQL Injection behavior (Manual)  | The registration input triggered internal server errors when SQL meta-characters were submitted, indicating unsafe database query handling. | Manual browser testing resulted in HTTP 500 Internal Server Error responses.  |
+| F-02 | 🔴 High   | Path Traversal patterns (Manual) | Path traversal payloads were accepted by input fields, suggesting weak backend validation and improper input sanitization.                  | Manual browser testing using traversal strings (e.g., `../`) in input fields. |
+| F-03 | 🟠 Medium | Missing CSRF protection          | No anti-CSRF tokens were present on the registration form, making it vulnerable to CSRF attacks.                                            | ZAP alert: Absence of Anti-CSRF Tokens.                                       |
+| F-04 | 🟠 Medium | Missing security headers         | Important security headers such as CSP and anti-clickjacking protections were not set.                                                      | ZAP alerts: CSP Header Not Set, Missing Anti-Clickjacking Header.             |
+| F-05 | 🟡 Low    | Application error disclosure     | The application exposes internal server errors that may reveal implementation details.                                                      | ZAP alert: Application Error Disclosure (HTTP 500).                           |
+| F-06 | 🟡 Low    | Missing X-Content-Type-Options   | Responses lacked the `X-Content-Type-Options: nosniff` header, weakening MIME-type protection.                                              | ZAP alert: X-Content-Type-Options Header Missing.                             |
 
 ---
 
-## **5️⃣ OWASP ZAP Test Report (Attachment)**
+# 5️⃣ OWASP ZAP Test Report (Attachment)
 
-### **Purpose**
+**Purpose:**
 
-Contains the automated scan results produced by OWASP ZAP.
+- This section includes the complete OWASP ZAP automated scan results in Markdown format.
+- The report reflects configuration and header-related issues detected automatically.
+- High-risk issues such as SQL Injection and Path Traversal were identified through **manual browser-based testing** and are therefore documented separately in the Findings section.
 
-### **Location**
-
-📁 `Lab/Part 1/Zap Report.md`
-
----
+📄 **OWASP ZAP Full Report:**  
+[OWASP ZAP Full Report](https://github.com/FahimOrko/Log-Book/blob/main/Lab/Part%201/zap_report_round_1.md)
