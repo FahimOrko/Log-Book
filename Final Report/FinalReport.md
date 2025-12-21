@@ -158,7 +158,7 @@ This section describes the work carried out during each phase of the Booking Sys
 
 **Total Hours Spent:**
 
-> 61 hours
+> 65 hours
 
 ---
 
@@ -170,7 +170,7 @@ This section describes the work carried out during each phase of the Booking Sys
 | SQL Injection                   | 3     |
 | Authentication                  | 3     |
 | Access Control / Tokens         | 3     |
-| Booking System – Phase 1 Part 1 | 7     |
+| Booking System – Phase 1 Part 1 | 11    |
 | Booking System – Phase 1 Part 2 | 12    |
 | Booking System – Phase 2        | 11    |
 | Booking System – Phase 3        | 10    |

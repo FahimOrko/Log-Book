@@ -25,6 +25,7 @@ Cyber Security Course
 | 18.08.2025 |     4      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
 | 19.08.2025 |     4      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
 | 19.09.2025 |     3      |   Booking Phase 4    |                 GDPR guidelines                 |
+| 20.09.2025 |     4      | Redo Phase 1 Part 1  |  Manual Testing SQL Injection & Path Traversal  |
 
 ---
 
