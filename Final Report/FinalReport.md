@@ -21,17 +21,68 @@ Below is the list of PortSwigger Web Security Academy labs completed during this
 
   - SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
   - SQL injection vulnerability allowing login bypass
+    <br>
 
 - **Access Control Vulnerabilities**
 
   - Unprotected admin functionality
   - Unprotected admin functionality with unpredictable URL
   - User role controlled by request parameter
+    <br>
 
 - **Authentication Vulnerabilities**
+
   - Username enumeration via different responses
   - 2FA simple bypass
   - Password reset broken logic
+    <br>
+
+- **Cross-Site Scripting (XSS)**
+
+  - Reflected XSS into HTML context with nothing encoded
+  - Stored XSS into HTML context with nothing encoded
+  - DOM XSS in `document.write` sink using `location.search` as source
+  - DOM XSS in `innerHTML` sink using `location.search` as source
+  - DOM XSS in jQuery anchor `href` attribute sink using `location.search` source
+  - DOM XSS in jQuery selector sink using a `hashchange` event
+  - Reflected XSS into attribute with angle brackets HTML-encoded
+  - Stored XSS into anchor `href` attribute with double quotes HTML-encoded
+  - Reflected XSS into a JavaScript string with angle brackets HTML-encoded
+    <br>
+
+- **Information disclosure**
+
+  - Information disclosure in error messages
+
+---
+
+#### Lab - SQL Injection
+
+> ![alt text](SQL-injection.png)
+
+---
+
+#### Lab - Authentication
+
+> ![alt text](Authentication.png)
+
+---
+
+#### Lab - Access Token
+
+> ![alt text](Access-Token.png)
+
+---
+
+#### Lab - Cross Site Scripting
+
+> ![alt text](Cross-Site-Scripting.png)
+
+---
+
+#### Lab - Information disclosure
+
+![alt text](Information-disclosure.png)
 
 ---
 
@@ -181,7 +232,7 @@ This project provided a practical understanding of cybersecurity beyond theory. 
 
 **Total Hours Spent:**
 
-> 69 hours
+> 89 hours
 
 ---
 
@@ -190,15 +241,18 @@ This project provided a practical understanding of cybersecurity beyond theory. 
 | Topic                           | Hours |
 | ------------------------------- | ----- |
 | Cisco Cybersecurity Course      | 12    |
-| SQL Injection                   | 3     |
-| Authentication                  | 3     |
-| Access Control / Tokens         | 3     |
+| SQL Injection (Lab)             | 3     |
+| Authentication (Lab)            | 3     |
+| Access Control / Tokens (Lab)   | 3     |
+| Cross-site scripting (Lab)      | 7     |
+| Information disclosure (Lab)    | 2     |
 | Booking System – Phase 1 Part 1 | 11    |
 | Booking System – Phase 1 Part 2 | 12    |
 | Booking System – Phase 2        | 11    |
 | Booking System – Phase 3        | 10    |
-| Booking System – Phase 4        | 3     |
-| Writing Final Report            | 4     |
+| Booking System – Phase 4        | 4     |
+| Watching Class Recordings       | 8     |
+| Final Report & Finishin Up      | 3     |
 
 > _(Data based on course logbook)_
 

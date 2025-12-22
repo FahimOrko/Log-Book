@@ -1,6 +1,4 @@
-# Log-Book
-
-Cyber Security Course
+# Log-Book (Cyber Security Course)
 
 ---
 
@@ -21,26 +19,15 @@ Cyber Security Course
 | 12.07.2025 |     3      |   Booking Phase 2    | Cracking Password - Learing diffrent Techniques |
 | 12.08.2025 |     4      |   Booking Phase 2    | Cracking Password - Learing diffrent Techniques |
 | 12.09.2025 |     4      |   Booking Phase 2    | Cracking Password - Learing diffrent Techniques |
-| 17.08.2025 |     2      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
-| 18.08.2025 |     4      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
-| 19.08.2025 |     4      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
-| 19.09.2025 |     3      |   Booking Phase 4    |                 GDPR guidelines                 |
-| 20.09.2025 |     4      | Redo Phase 1 Part 1  |  Manual Testing SQL Injection & Path Traversal  |
-| 21.09.2025 |     4      |     Final Report     |  Writeing Final Report & Finnsih up everything  |
-
----
-
-#### Lab - SQL Injection
-
-![alt text](SQL-injection.png)
-
-#### Lab - Authentication
-
-![alt text](Authentication.png)
-
-#### Lab - Access Token
-
-![alt text](Access-Token.png)
+| 12.10.2025 |     4      |   Portswigger Lab    |              Cross-site scripting               |
+| 12.11.2025 |     3      |   Portswigger Lab    |              Cross-site scripting               |
+| 12.11.2025 |     2      |   Portswigger Lab    |             Information disclosure              |
+| 12.17.2025 |     2      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
+| 12.18.2025 |     6      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
+| 12.19.2025 |     2      |   Booking Phase 3    |        Auth Testing - Testing Endpoints         |
+| 12.19.2025 |     4      |   Booking Phase 4    |                 GDPR guidelines                 |
+| 12.20.2025 |     4      | Redo Phase 1 Part 1  |  Manual Testing SQL Injection & Path Traversal  |
+| 12.21.2025 |     3      |     Final Report     |  Writeing Final Report & Finnsih up everything  |
 
 ---
 
